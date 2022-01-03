@@ -1,0 +1,27 @@
+N := {Program, AuxType, ArrayType, Array, ArrayAux, Type, Decl, StmtList, Stmt, CompoundStmt, SimpleStmt, StructureStmt, IfStmt, AuxElif, Step, ForStmt, ForEachStmt, ForEachAux, WhileStmt, DoWhileStmt, Exp, BoolAssignmentStmt, AssignmentStmt, Term, Factor, InputOutputStmtId, Rel, Cond} 
+E := {(, ), [, ], {, },  , \t, \n, +, -, *, /, =, %, =>, <, >, <=, >=, ==, ===, !=, !==, !, **, &&, ||, \, <!--, -->, int, string, char, bool, float, true, false, array, read, write, in, elif, if, else, do, while, for, foreach, identifier, const, IntConst, FloatConst} 
+S := Program 
+P := { 
+	Program -> CompoundStmt, 
+	AuxType -> int | string | char | bool | float, 
+	ArrayType -> array | Array, 
+	Array -> [ ArrayAux ], 
+	ArrayAux -> identifier | constant | identifier ArrayAux | constant  ArrayAux, 
+ 	Type -> AuxType | ArrayType, 
+	Decl -> identifier = const | identifier = identifier | identifier = true | identifier = false, 
+	Stmt -> SimpleStmt | StructureStmt, 
+	CompoundStmt -> ** Stmt CompoundStmt **, 
+ 	SimpleStmt -> Decl | InputOutputStmtId | E,  
+ 	StructureStmt -> IfStmt | WhileStmt | ForStmt | ForEachStmt | DoWhileStmt,  
+ 	IfStmt ->  if  Cond ** Stmt ** | if  CondStmt  AuxElif | if  Cond ** Stmt ** else ** Stmt ** | if  Cond ** Stmt **  AuxElif else ** Stmt **, 
+	AuxElif -> elif Cond ** Stmt ** AuxElif | elif Cond ** Stmt **, 
+ 	Step -> identifier | const, 
+ 	ForStmt ->  for ( identifier in Step ) Stmt | for (  identifier  in Step => Step ) Stmt, 
+ 	ForEachStmt -> foreach ( Array as identifier ForEachAux ) Stmt | foreach ( Array as  identifier ) Stmt, 
+ 	ForEachAux -> => identifier, 
+ 	WhileStmt -> while Cond ** Stmt **, 
+ 	DoWhileStmt -> do ** Stmt ** while Cond, 
+	InputOutputStmtId ->  read ( identifier )  |  write ( identifier ),
+ 	Rel -> < | <= | == | != | >= | > | | === | !==, 
+ 	Cond -> ( identifier Rel identifier ) | ( identifier Rel const )
+} 
